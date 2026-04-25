@@ -25,16 +25,15 @@ $RestorePoint  = $true   # Creer un point de restauration avant toute modificati
 function Show-Banner {
     Clear-Host
     $banner = @"
-  ██╗    ██╗██╗███╗   ██╗ ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗
-  ██║    ██║██║████╗  ██║██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗
-  ██║ █╗ ██║██║██╔██╗ ██║██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝
-  ██║███╗██║██║██║╚██╗██║██║   ██║██╔═══╝    ██║   ██║██║╚██╔╝██║██║ ███╔╝  ██╔══╝  ██╔══██╗
-  ╚███╔███╔╝██║██║ ╚████║╚██████╔╝██║        ██║   ██║██║ ╚═╝ ██║██║███████╗███████╗██║  ██║
-   ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝        ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝
+  ##    ## ####### ###    ##  ######  ########  ########  ####### ###    ### ####### #######  ######
+  ##    ## ##      ####   ## ##    ## ##     ##    ##     ## #### ####  #### ##        ##    ##    ##
+  ##  # ## ##      ## ##  ## ##    ## #######      ##     ## #### ## #### ## #####     ##    ##    ##
+  ## ### ## ##      ##  #### ##    ## ##           ##     ## #### ##  ##  ## ##        ##    ##    ##
+   ###  ###  ####### ##   ###  ######  ##           ##    ####### ##      ## #######   ##     ######
 "@
     Write-Host $banner -ForegroundColor Cyan
     Write-Host "  Version $ScriptVersion  |  Debloat & Optimisation Windows 10/11" -ForegroundColor DarkCyan
-    Write-Host "  ══════════════════════════════════════════════════════════════════════════════════════" -ForegroundColor DarkGray
+    Write-Host "  ============================================================================" -ForegroundColor DarkGray
     Write-Host ""
 }
 
@@ -73,10 +72,13 @@ function Confirm-Action {
     Write-Host "  [?] $Question" -ForegroundColor Yellow
     Write-Host "      [O] Oui   [N] Non   [Q] Quitter" -ForegroundColor DarkGray
     $response = Read-Host "      Votre choix"
-    switch ($response.ToUpper()) {
-        "O" { return $true }
-        "Q" { Write-Log "Script annule par l'utilisateur." "WARN"; exit }
-        default { return $false }
+    if ($response.ToUpper() -eq "O") {
+        return $true
+    } elseif ($response.ToUpper() -eq "Q") {
+        Write-Log "Script annule par l'utilisateur." "WARN"
+        exit
+    } else {
+        return $false
     }
 }
 
@@ -114,8 +116,11 @@ function Test-Prerequisites {
 
     # Connexion Internet (optionnel)
     $net = Test-NetConnection -ComputerName "8.8.8.8" -Port 53 -InformationLevel Quiet -ErrorAction SilentlyContinue
-    if ($net) { Write-Log "Connexion Internet disponible" "OK" }
-    else       { Write-Log "Pas de connexion Internet (certaines fonctions limitees)" "WARN" }
+    if ($net) {
+        Write-Log "Connexion Internet disponible" "OK"
+    } else {
+        Write-Log "Pas de connexion Internet (certaines fonctions limitees)" "WARN"
+    }
 }
 
 # ============================================================
@@ -151,7 +156,7 @@ $AppsToRemove = @(
     "Microsoft.MicrosoftSolitaireCollection"
     "Microsoft.MicrosoftStickyNotes"
     "Microsoft.MixedReality.Portal"
-    "Microsoft.MSPaint"                        # Paint 3D (pas le Paint classique)
+    "Microsoft.MSPaint"
     "Microsoft.NetworkSpeedTest"
     "Microsoft.Office.OneNote"
     "Microsoft.OneConnect"
@@ -160,7 +165,7 @@ $AppsToRemove = @(
     "Microsoft.SkypeApp"
     "Microsoft.Todos"
     "Microsoft.Wallet"
-    "Microsoft.windowscommunicationsapps"      # Courrier et Calendrier
+    "Microsoft.windowscommunicationsapps"
     "Microsoft.WindowsFeedbackHub"
     "Microsoft.WindowsMaps"
     "Microsoft.WindowsSoundRecorder"
@@ -177,9 +182,9 @@ $AppsToRemove = @(
     "king.com.CandyCrushSaga"
     "king.com.CandyCrushFriends"
     "king.com.FarmHeroesSaga"
-    "89006A2EA1EF4D64B57B679CC49A5915"          # CandyCrush génériques
-    "A278AB0D24DD776A98DA8B0C8B879A20"          # Dolby
-    "D52A8D61D68C4DE7AC3D2D3AF15E93A5"          # Facebook
+    "89006A2EA1EF4D64B57B679CC49A5915"
+    "A278AB0D24DD776A98DA8B0C8B879A20"
+    "D52A8D61D68C4DE7AC3D2D3AF15E93A5"
     "FACEBOOK.FACEBOOK"
     "Facebook.InstagramApp"
     "TikTok.TikTok"
@@ -247,8 +252,8 @@ $ServicesToDisable = @{
     "SharedAccess"           = "Partage de connexion Internet (ICS)"
     "WbioSrvc"               = "Biometrie Windows (si non utilise)"
     "WMPNetworkSvc"          = "Partage reseau Windows Media Player"
-    "WerSvc"                 = "Rapport d'erreurs Windows"
-    "wercplsupport"          = "Support panneau rapports d'erreurs"
+    "WerSvc"                 = "Rapport d erreurs Windows"
+    "wercplsupport"          = "Support panneau rapports d erreurs"
     "Fax"                    = "Telecopie"
     "TapiSrv"                = "Telephonie"
     "SysMain"                = "SuperFetch / SysMain (HDD=ON, SSD=OFF)"
@@ -333,17 +338,17 @@ function Set-PrivacySettings {
     # Desactiver Cortana
     $cortanaPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     if (!(Test-Path $cortanaPath)) { New-Item -Path $cortanaPath -Force | Out-Null }
-    Set-ItemProperty -Path $cortanaPath -Name "AllowCortana" -Value 0 -Type DWord -Force
-    Set-ItemProperty -Path $cortanaPath -Name "AllowCortanaAboveLock" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $cortanaPath -Name "AllowSearchToUseLocation" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $cortanaPath -Name "ConnectedSearchUseWeb" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $cortanaPath -Name "AllowCortana"              -Value 0 -Type DWord -Force
+    Set-ItemProperty -Path $cortanaPath -Name "AllowCortanaAboveLock"     -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $cortanaPath -Name "AllowSearchToUseLocation"  -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $cortanaPath -Name "ConnectedSearchUseWeb"     -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Cortana desactive" "OK"
 
     # Desactiver Bing dans la recherche Windows
     $searchPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search"
     if (!(Test-Path $searchPath)) { New-Item -Path $searchPath -Force | Out-Null }
     Set-ItemProperty -Path $searchPath -Name "BingSearchEnabled" -Value 0 -Type DWord -Force
-    Set-ItemProperty -Path $searchPath -Name "CortanaConsent" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $searchPath -Name "CortanaConsent"    -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Recherche Bing dans le menu Demarrer desactivee" "OK"
 
     # Desactiver Diagnostic & Feedback
@@ -354,9 +359,9 @@ function Set-PrivacySettings {
     Write-Log "Notifications de feedback desactivees" "OK"
 
     # Desactiver la collecte d'activite (Timeline)
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "EnableActivityFeed" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "EnableActivityFeed"   -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "PublishUserActivities" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "UploadUserActivities" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "UploadUserActivities"  -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Historique d'activite (Timeline) desactive" "OK"
 
     # Desactiver envoi donnees d'ecriture manuscrite
@@ -375,7 +380,6 @@ function Optimize-Performance {
     # Plan d'alimentation Haute Performance
     powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c 2>$null
     if ($LASTEXITCODE -ne 0) {
-        # Creer si n'existe pas
         powercfg -duplicatescheme 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c 2>$null
         powercfg -setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c 2>$null
     }
@@ -384,25 +388,25 @@ function Optimize-Performance {
     # Desactiver les effets visuels superflus
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" -Name "VisualFXSetting" -Value 2 -Type DWord -Force -ErrorAction SilentlyContinue
     $visualKeys = "HKCU:\Control Panel\Desktop"
-    Set-ItemProperty -Path $visualKeys -Name "DragFullWindows"          -Value "0" -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $visualKeys -Name "MenuShowDelay"            -Value "0" -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $visualKeys -Name "UserPreferencesMask"      -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00)) -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics"  -Name "MinAnimate" -Value "0" -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\DWM"       -Name "EnableAeroPeek" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $visualKeys -Name "DragFullWindows"     -Value "0" -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $visualKeys -Name "MenuShowDelay"       -Value "0" -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $visualKeys -Name "UserPreferencesMask" -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00)) -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate"    -Value "0" -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\DWM"      -Name "EnableAeroPeek" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Effets visuels reduits pour meilleures performances" "OK"
 
     # Accelerer le menu Demarrer
     $startPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-    Set-ItemProperty -Path $startPath -Name "Start_PowerButtonAction" -Value 2   -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $startPath -Name "HideFileExt"             -Value 0   -Type DWord -Force -ErrorAction SilentlyContinue
-    Set-ItemProperty -Path $startPath -Name "Hidden"                  -Value 1   -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $startPath -Name "Start_PowerButtonAction" -Value 2 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $startPath -Name "HideFileExt"             -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $startPath -Name "Hidden"                  -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Explorateur optimise (extensions visibles, fichiers caches visibles)" "OK"
 
-    # Desactiver Hibernate (libere de l'espace)
+    # Desactiver Hibernate
     powercfg -h off 2>$null
     Write-Log "Hibernation desactivee (libere hiberfil.sys)" "OK"
 
-    # Desactiver Windows Search Indexing (optionnel, ameliore I/O)
+    # Desactiver Windows Search Indexing
     $idxSvc = Get-Service -Name "WSearch" -ErrorAction SilentlyContinue
     if ($idxSvc) {
         Stop-Service "WSearch" -Force -ErrorAction SilentlyContinue
@@ -428,7 +432,7 @@ function Optimize-Performance {
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance" -Name "fAllowToGetHelp" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Assistance a distance desactivee" "OK"
 
-    # NTFS - Desactiver la mise a jour de lastaccess (gain I/O)
+    # NTFS - Desactiver la mise a jour de lastaccess
     fsutil behavior set disablelastaccess 1 2>$null
     Write-Log "Mise a jour LastAccess NTFS desactivee (gain I/O)" "OK"
 
@@ -449,7 +453,7 @@ function Optimize-Network {
     Set-ItemProperty -Path $qosPath -Name "NonBestEffortLimit" -Value 0 -Type DWord -Force
     Write-Log "Bande passante reservee pour QoS supprimee (gain 20%)" "OK"
 
-    # Desactiver Nagle Algorithm (reduit latence reseaux locaux)
+    # Desactiver Nagle Algorithm
     $tcpPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
     Get-ChildItem -Path $tcpPath | ForEach-Object {
         Set-ItemProperty -Path $_.PSPath -Name "TcpAckFrequency" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
@@ -468,7 +472,7 @@ function Optimize-Network {
     Clear-DnsClientCache -ErrorAction SilentlyContinue
     Write-Log "Cache DNS vide" "OK"
 
-    # Desactiver la reduction automatique du MTU
+    # Optimiser TCP
     netsh int tcp set global autotuninglevel=normal 2>$null
     netsh int tcp set global rss=enabled 2>$null
     netsh int tcp set global chimney=enabled 2>$null
@@ -538,7 +542,7 @@ function Clean-System {
         Write-Log "Dossier Windows.old supprime" "OK"
     }
 
-    # SFC & DISM (optionnel, peut etre long)
+    # SFC
     Write-Log "Verification de l'integrite des fichiers systeme en cours..." "INFO"
     $sfcJob = Start-Job { sfc /scannow }
     Wait-Job $sfcJob -Timeout 300 | Out-Null
@@ -589,7 +593,6 @@ function Optimize-Startup {
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power" -Name "HiberbootEnabled" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Demarrage rapide (Fast Boot) active" "OK"
 
-    # Desactiver les programmes de demarrage courants (notification uniquement)
     Write-Log "Programmes au demarrage : verifiez le Gestionnaire de taches > Demarrage" "INFO"
 }
 
@@ -603,7 +606,7 @@ function Set-BasicSecurity {
     Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True -ErrorAction SilentlyContinue
     Write-Log "Pare-feu Windows active sur tous les profils" "OK"
 
-    # Desactiver SMBv1 (vulnerabilite WannaCry)
+    # Desactiver SMBv1
     Disable-WindowsOptionalFeature -Online -FeatureName "SMB1Protocol" -NoRestart -ErrorAction SilentlyContinue | Out-Null
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "SMB1" -Value 0 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "SMBv1 desactive (protection contre WannaCry/NotPetya)" "OK"
@@ -613,11 +616,11 @@ function Set-BasicSecurity {
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "NoDriveTypeAutoRun" -Value 255 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "AutoRun / AutoPlay desactives" "OK"
 
-    # Activer Windows Defender (si pas de tiers)
+    # Activer Windows Defender
     Set-MpPreference -DisableRealtimeMonitoring $false -ErrorAction SilentlyContinue
     Write-Log "Windows Defender : protection en temps reel verifiee" "OK"
 
-    # Desactiver Remote Desktop (si non requis)
+    # Desactiver Remote Desktop
     Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 1 -Type DWord -Force -ErrorAction SilentlyContinue
     Write-Log "Bureau a distance (RDP) desactive" "OK"
 
@@ -631,22 +634,21 @@ function Set-BasicSecurity {
 # ============================================================
 function Show-Summary {
     Write-Host ""
-    Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "  ║                  OPTIMISATION TERMINEE !                     ║" -ForegroundColor Green
-    Write-Host "  ╠══════════════════════════════════════════════════════════════╣" -ForegroundColor Green
-    Write-Host "  ║  ✔ Applications bloatware supprimees                         ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Services inutiles desactives                              ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Confidentialite & telemetrie configurees                  ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Performances optimisees                                   ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Reseau optimise                                           ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Systeme nettoye                                           ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Demarrage accelere                                        ║" -ForegroundColor White
-    Write-Host "  ║  ✔ Securite de base renforcee                                ║" -ForegroundColor White
-    Write-Host "  ╠══════════════════════════════════════════════════════════════╣" -ForegroundColor Green
-    Write-Host "  ║  Journal sauvegarde : $LogFile" -ForegroundColor Cyan
-    Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "  +============================================================+" -ForegroundColor Green
+    Write-Host "  |           OPTIMISATION TERMINEE !                          |" -ForegroundColor Green
+    Write-Host "  +============================================================+" -ForegroundColor Green
+    Write-Host "  | [OK] Applications bloatware supprimees                     |" -ForegroundColor White
+    Write-Host "  | [OK] Services inutiles desactives                          |" -ForegroundColor White
+    Write-Host "  | [OK] Confidentialite et telemetrie configurees              |" -ForegroundColor White
+    Write-Host "  | [OK] Performances optimisees                               |" -ForegroundColor White
+    Write-Host "  | [OK] Reseau optimise                                       |" -ForegroundColor White
+    Write-Host "  | [OK] Systeme nettoye                                       |" -ForegroundColor White
+    Write-Host "  | [OK] Demarrage accelere                                    |" -ForegroundColor White
+    Write-Host "  | [OK] Securite de base renforcee                            |" -ForegroundColor White
+    Write-Host "  +============================================================+" -ForegroundColor Green
+    Write-Host "  Journal sauvegarde : $LogFile" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "  ► Un REDEMARRAGE est recommande pour appliquer tous les changements." -ForegroundColor Yellow
+    Write-Host "  >> Un REDEMARRAGE est recommande pour appliquer tous les changements." -ForegroundColor Yellow
     Write-Host ""
 }
 
@@ -656,18 +658,18 @@ function Show-Summary {
 function Show-Menu {
     Show-Banner
     Write-Host "  MENU PRINCIPAL" -ForegroundColor White
-    Write-Host "  ─────────────────────────────────────────" -ForegroundColor DarkGray
+    Write-Host "  -----------------------------------------" -ForegroundColor DarkGray
     Write-Host "  [1]  Debloat complet (toutes les etapes)" -ForegroundColor Cyan
     Write-Host "  [2]  Supprimer les applications inutiles" -ForegroundColor White
-    Write-Host "  [3]  Desactiver les services inutiles" -ForegroundColor White
-    Write-Host "  [4]  Confidentialite & Telemetrie" -ForegroundColor White
-    Write-Host "  [5]  Optimiser les performances" -ForegroundColor White
-    Write-Host "  [6]  Optimiser le reseau" -ForegroundColor White
-    Write-Host "  [7]  Nettoyer le systeme" -ForegroundColor White
-    Write-Host "  [8]  Optimiser le demarrage" -ForegroundColor White
-    Write-Host "  [9]  Securite de base" -ForegroundColor White
-    Write-Host "  ─────────────────────────────────────────" -ForegroundColor DarkGray
-    Write-Host "  [Q]  Quitter" -ForegroundColor Red
+    Write-Host "  [3]  Desactiver les services inutiles"    -ForegroundColor White
+    Write-Host "  [4]  Confidentialite et Telemetrie"       -ForegroundColor White
+    Write-Host "  [5]  Optimiser les performances"          -ForegroundColor White
+    Write-Host "  [6]  Optimiser le reseau"                 -ForegroundColor White
+    Write-Host "  [7]  Nettoyer le systeme"                 -ForegroundColor White
+    Write-Host "  [8]  Optimiser le demarrage"              -ForegroundColor White
+    Write-Host "  [9]  Securite de base"                    -ForegroundColor White
+    Write-Host "  -----------------------------------------" -ForegroundColor DarkGray
+    Write-Host "  [Q]  Quitter"                             -ForegroundColor Red
     Write-Host ""
 
     $choice = Read-Host "  Entrez votre choix"
@@ -683,7 +685,7 @@ Test-Prerequisites
 
 Write-Host ""
 Write-Host "  Ce script va optimiser votre Windows 10/11." -ForegroundColor White
-Write-Host "  Un journal sera cree sur le Bureau." -ForegroundColor DarkGray
+Write-Host "  Un journal sera cree sur le Bureau."          -ForegroundColor DarkGray
 Write-Host ""
 
 if ($RestorePoint) {
@@ -692,38 +694,45 @@ if ($RestorePoint) {
 
 $menuChoice = Show-Menu
 
-switch ($menuChoice.ToUpper()) {
-    "1" {
-        Write-Log "MODE COMPLET SELECTIONNE" "INFO"
-        Remove-BloatApps
-        Disable-UnnecessaryServices
-        Set-PrivacySettings
-        Optimize-Performance
-        Optimize-Network
-        Clean-System
-        Optimize-Startup
-        Set-BasicSecurity
-    }
-    "2" { Remove-BloatApps }
-    "3" { Disable-UnnecessaryServices }
-    "4" { Set-PrivacySettings }
-    "5" { Optimize-Performance }
-    "6" { Optimize-Network }
-    "7" { Clean-System }
-    "8" { Optimize-Startup }
-    "9" { Set-BasicSecurity }
-    "Q" { Write-Log "Script ferme par l'utilisateur." "WARN"; exit }
-    default {
-        Write-Log "Choix invalide. Lancement du mode complet par defaut." "WARN"
-        Remove-BloatApps
-        Disable-UnnecessaryServices
-        Set-PrivacySettings
-        Optimize-Performance
-        Optimize-Network
-        Clean-System
-        Optimize-Startup
-        Set-BasicSecurity
-    }
+if ($menuChoice.ToUpper() -eq "1") {
+    Write-Log "MODE COMPLET SELECTIONNE" "INFO"
+    Remove-BloatApps
+    Disable-UnnecessaryServices
+    Set-PrivacySettings
+    Optimize-Performance
+    Optimize-Network
+    Clean-System
+    Optimize-Startup
+    Set-BasicSecurity
+} elseif ($menuChoice.ToUpper() -eq "2") {
+    Remove-BloatApps
+} elseif ($menuChoice.ToUpper() -eq "3") {
+    Disable-UnnecessaryServices
+} elseif ($menuChoice.ToUpper() -eq "4") {
+    Set-PrivacySettings
+} elseif ($menuChoice.ToUpper() -eq "5") {
+    Optimize-Performance
+} elseif ($menuChoice.ToUpper() -eq "6") {
+    Optimize-Network
+} elseif ($menuChoice.ToUpper() -eq "7") {
+    Clean-System
+} elseif ($menuChoice.ToUpper() -eq "8") {
+    Optimize-Startup
+} elseif ($menuChoice.ToUpper() -eq "9") {
+    Set-BasicSecurity
+} elseif ($menuChoice.ToUpper() -eq "Q") {
+    Write-Log "Script ferme par l'utilisateur." "WARN"
+    exit
+} else {
+    Write-Log "Choix invalide. Lancement du mode complet par defaut." "WARN"
+    Remove-BloatApps
+    Disable-UnnecessaryServices
+    Set-PrivacySettings
+    Optimize-Performance
+    Optimize-Network
+    Clean-System
+    Optimize-Startup
+    Set-BasicSecurity
 }
 
 Show-Summary
