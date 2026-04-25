@@ -45,17 +45,17 @@ function Write-Log {
     Add-Content -Path $LogFile -Value $line -ErrorAction SilentlyContinue
 
     switch ($Level) {
-        "OK"      { Write-Host "  [✔] " -ForegroundColor Green  -NoNewline; Write-Host $Message }
-        "WARN"    { Write-Host "  [!] " -ForegroundColor Yellow -NoNewline; Write-Host $Message }
-        "ERROR"   { Write-Host "  [✘] " -ForegroundColor Red    -NoNewline; Write-Host $Message }
-        "SKIP"    { Write-Host "  [-] " -ForegroundColor Gray   -NoNewline; Write-Host $Message }
+        "OK"      { Write-Host "  [OK]  " -ForegroundColor Green  -NoNewline; Write-Host $Message }
+        "WARN"    { Write-Host "  [!]   " -ForegroundColor Yellow -NoNewline; Write-Host $Message }
+        "ERROR"   { Write-Host "  [ERR] " -ForegroundColor Red    -NoNewline; Write-Host $Message }
+        "SKIP"    { Write-Host "  [-]   " -ForegroundColor Gray   -NoNewline; Write-Host $Message }
         "SECTION" {
             Write-Host ""
-            Write-Host "  ──────────────────────────────────────────" -ForegroundColor DarkCyan
-            Write-Host "  ► $Message" -ForegroundColor Cyan
-            Write-Host "  ──────────────────────────────────────────" -ForegroundColor DarkCyan
+            Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
+            Write-Host "  >> $Message" -ForegroundColor Cyan
+            Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
         }
-        default   { Write-Host "  [i] " -ForegroundColor Blue   -NoNewline; Write-Host $Message }
+        default   { Write-Host "  [i]   " -ForegroundColor Blue   -NoNewline; Write-Host $Message }
     }
 }
 
