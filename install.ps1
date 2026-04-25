@@ -10,6 +10,12 @@
 $ScriptUrl   = "https://winoptimizer-powershell.vercel.app/WinOptimizer.ps1"
 $TempDir     = "$env:TEMP\WinOptimizer"
 $ScriptLocal = "$TempDir\WinOptimizer.ps1"
+
+# Après le téléchargement, avant le lancement
+$wc = New-Object System.Net.WebClient
+$wc.Headers.Add("User-Agent", "WinOptimizer/2.0 PowerShell")
+$wc.Encoding = [System.Text.Encoding]::UTF8   # ← AJOUTER CETTE LIGNE
+$wc.DownloadFile($ScriptUrl, $ScriptLocal)
 # ───────────────────────────────────────────────────────────────
 
 function Write-Banner {
