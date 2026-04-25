@@ -45,14 +45,6 @@ body::before {
     z-index: 1;
 }
 
-    .code-line {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 18px;
-    font-family: "JetBrains Mono", monospace;
-}
-
 /* LOGO */
 .logo {
     display: grid;
@@ -186,25 +178,25 @@ code {
         sans rien installer.
     </p>
 
-<div class="terminal">
+    <div class="terminal">
 
-    <div class="terminal-header">
-        <div class="dots">
-            <div class="dot red"></div>
-            <div class="dot yellow"></div>
-            <div class="dot green"></div>
+        <div class="terminal-header">
+            <div class="dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+
+            <button class="copy-btn" onclick="copyCommand(this)">
+                Copier
+            </button>
         </div>
 
-        <button class="copy-btn" onclick="copyCommand(this)">
-            Copier
-        </button>
-    </div>
+        <code id="command">
+            <span class="ps">PS&gt;</span>
+            irm <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span> | iex
+        </code>
 
-    <div class="code-line">
-        <span class="ps">PS&gt;</span>
-        <span>irm</span>
-        <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span>
-        <span>| iex</span>
     </div>
 
 </div>
