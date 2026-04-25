@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinOptimizer — Debloat & Optimisation Windows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #06080c;
+    --surface: #0b0f16;
+    --border:  #161e2a;
+    --border2: #1e2d40;
+    --accent:  #00c8ff;
+    --accent2: #005fe8;
+    --green:   #00ff88;
+    --orange:  #ff7a1a;
+    --text:    #dde4ed;
+    --muted:   #3d4f63;
+    --muted2:  #5a6e85;
+    --card:    #0d1420;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh; overflow-x: hidden;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    pointer-events: none; z-index: 0;
+  }
+  .blob { position:fixed; border-radius:50%; filter:blur(130px); pointer-events:none; z-index:0; animation:blobf 9s ease-in-out infinite alternate; }
+  .b1 { width:640px;height:640px; background:radial-gradient(circle,rgba(0,95,232,.13),transparent 70%); top:-220px;left:-160px; }
+  .b2 { width:480px;height:480px; background:radial-gradient(circle,rgba(0,200,255,.09),transparent 70%); bottom:-80px;right:-80px; animation-direction:alternate-reverse;animation-duration:11s; }
+  .b3 { width:300px;height:300px; background:radial-gradient(circle,rgba(0,255,136,.06),transparent 70%); top:50%;left:60%;animation-duration:7s; }
+  @keyframes blobf { to { transform: translate(28px,-36px) scale(1.07); } }
+
+  nav {
+    position:fixed;top:0;left:0;right:0;z-index:200;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1rem 2.5rem;
+    background:rgba(6,8,12,.78);
+    backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo { display:flex;align-items:center;gap:.55rem;font-size:1rem;font-weight:800;letter-spacing:.12em; }
+  .logo-icon { width:28px;height:28px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.75rem; }
+  .logo-text { color:var(--text); }
+  .logo-text span { color:var(--accent); }
+  .logo-v { font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted2);background:var(--border2);padding:.15rem .45rem;border-radius:4px; }
+  .nav-gh { display:flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted2);background:var(--border);border:1px solid var(--border2);padding:.35rem .75rem;border-radius:6px;text-decoration:none;transition:all .2s; }
+  .nav-gh:hover { color:var(--text);border-color:var(--muted); }
+
+  main { position:relative; z-index:1; }
+
+  .hero { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem; }
+  .pill { font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(0,200,255,.25);background:rgba(0,200,255,.06);padding:.32rem 1rem;border-radius:100px;margin-bottom:2rem;animation:fd .7s ease both; }
+  h1 { font-size:clamp(2.6rem,7.5vw,5.8rem);font-weight:800;line-height:1.04;letter-spacing:-.035em;animation:fd .7s .1s ease both;max-width:880px; }
+  .grad { background:linear-gradient(130deg,var(--accent) 0%,var(--accent2) 55%,#a040ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .hero-desc { font-size:1.05rem;font-weight:400;color:var(--muted2);max-width:520px;line-height:1.75;margin-top:1.4rem;animation:fd .7s .2s ease both; }
+
+  .cmd-wrap { margin-top:2.8rem;width:100%;max-width:680px;animation:fd .7s .3s ease both; }
+  .cmd-label { font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.55rem;text-align:left;display:flex;align-items:center;gap:.5rem; }
+  .cmd-label::before { content:'';display:block;width:18px;height:1px;background:var(--border2); }
+  .cmd-box { background:var(--card);border:1px solid var(--border2);border-radius:14px;display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s; }
+  .cmd-box:hover { border-color:rgba(0,200,255,.35);box-shadow:0 0 40px rgba(0,200,255,.07); }
+  .cmd-box::before { content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s; }
+  .cmd-box:hover::before { opacity:1; }
+  .dots { display:flex;gap:5px;flex-shrink:0; }
+  .dot { width:9px;height:9px;border-radius:50%; }
+  .dot-r{background:#ff5f57;}.dot-y{background:#ffbd2e;}.dot-g{background:#27c93f;}
+  .ps-prompt { font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--green);flex-shrink:0;margin-left:.4rem; }
+  .cmd-text { font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text);flex:1;text-align:left;word-break:break-all;line-height:1.4; }
+  .cmd-text .url { color:var(--accent); }
+  .copy-btn { flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.04em;color:var(--accent);background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.22);padding:.48rem 1rem;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap; }
+  .copy-btn:hover { background:rgba(0,200,255,.16);border-color:var(--accent);transform:translateY(-1px); }
+  .copy-btn.ok { color:var(--green);background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.3); }
+  .cmd-note { font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--muted);margin-top:.55rem;text-align:left;display:flex;align-items:center;gap:.4rem; }
+
+  .steps { display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:2.2rem;animation:fd .7s .4s ease both; }
+  .step { display:flex;align-items:center;gap:.55rem;background:var(--card);border:1px solid var(--border2);padding:.5rem .9rem;border-radius:8px;font-size:.78rem;color:var(--muted2); }
+  .sn { width:18px;height:18px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#000; }
+
+  .divider { max-width:1080px;margin:0 auto;border:none;border-top:1px solid var(--border); }
+
+  .stats { display:flex;justify-content:center;gap:5rem;flex-wrap:wrap;padding:3.5rem 2rem; }
+  .stat { text-align:center; }
+  .stat-n { font-size:3rem;font-weight:800;line-height:1;background:linear-gradient(130deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .stat-l { font-size:.75rem;color:var(--muted2);margin-top:.35rem;letter-spacing:.06em; }
+
+  .features { padding:1.5rem 2rem 5rem;max-width:1080px;margin:0 auto; }
+  .sec-head { text-align:center;margin-bottom:2.8rem; }
+  .sec-title { font-size:2rem;font-weight:800;letter-spacing:-.02em; }
+  .sec-sub { font-size:.88rem;color:var(--muted2);margin-top:.5rem; }
+  .grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden; }
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:500px){.grid{grid-template-columns:1fr;}}
+  .fc { background:var(--card);padding:1.6rem;position:relative;overflow:hidden;transition:background .3s; }
+  .fc:hover { background:#111d2e; }
+  .fc::after { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .3s; }
+  .fc:hover::after { transform:scaleX(1); }
+  .fi { font-size:1.6rem;margin-bottom:.8rem; }
+  .ft { font-size:.9rem;font-weight:700;margin-bottom:.3rem; }
+  .fd { font-size:.78rem;color:var(--muted2);line-height:1.6; }
+  .fcount { font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent);background:rgba(0,200,255,.07);padding:.18rem .45rem;border-radius:4px;display:inline-block;margin-top:.7rem; }
+
+  /* Deploy section */
+  .deploy { max-width:780px;margin:0 auto;padding:4rem 2rem 6rem; }
+  .deploy-card { background:var(--card);border:1px solid var(--border2);border-radius:16px;overflow:hidden; }
+  .deploy-header { padding:1.4rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.8rem;font-size:.85rem;font-weight:700; }
+  .dh-icon { width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1rem; }
+  .deploy-body { padding:1.6rem 1.8rem;display:flex;flex-direction:column;gap:1.3rem; }
+  .dstep { display:flex;gap:1rem;align-items:flex-start; }
+  .dstep-num { flex-shrink:0;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#000;margin-top:.05rem; }
+  .dstep-title { font-size:.82rem;font-weight:700;margin-bottom:.3rem; }
+  .dstep-desc { font-size:.76rem;color:var(--muted2);line-height:1.65; }
+  .dstep-code { font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);background:var(--bg);border:1px solid var(--border2);padding:.6rem .9rem;border-radius:7px;margin-top:.5rem;line-height:1.85; }
+  .cg{color:var(--green);}.ca{color:var(--accent);}.cm{color:var(--muted2);}.co{color:var(--orange);}
+
+  footer { text-align:center;padding:2rem;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);position:relative;z-index:1;line-height:2; }
+  footer a { color:var(--accent);text-decoration:none; }
+  footer a:hover { text-decoration:underline; }
+  @keyframes fd { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+  ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+</style>
+</head>
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div class="logo-text">WIN<span>OPTIMIZER</span></div>
+    <div class="logo-v">v2.0</div>
+  </div>
+  <a class="nav-gh" href="https://github.com/votre-pseudo/winoptimizer" target="_blank">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    GitHub
+  </a>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="pill">⚡ Windows 10 &amp; 11 — Open Source &amp; Gratuit</div>
+    <h1>Votre PC Windows,<br><span class="grad">enfin libéré.</span></h1>
+    <p class="hero-desc">Une seule commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage et renforce la sécurité — sans rien installer.</p>
+
+    <div class="cmd-wrap">
+      <div class="cmd-label">Coller dans PowerShell (Administrateur)</div>
+      <div class="cmd-box">
+        <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <span class="ps-prompt">PS&gt;</span>
+        <span class="cmd-text">irm <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span> | iex</span>
+        <button class="copy-btn" id="cpBtn" onclick="doCopy()">Copier</button>
+      </div>
+      <div class="cmd-note">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3d4f63" stroke-width="1.5"/><path d="M8 7v5M8 5v.5" stroke="#3d4f63" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Télécharge et exécute automatiquement — aucune installation, aucun fichier à garder
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="sn">1</div>PowerShell → Exécuter en admin</div>
+      <div class="step"><div class="sn">2</div>Coller la commande + Entrée</div>
+      <div class="step"><div class="sn">3</div>Choisir les modules</div>
+      <div class="step"><div class="sn">4</div>Redémarrer le PC</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n">40+</div><div class="stat-l">Apps supprimées</div></div>
+    <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Services désactivés</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Modules d'optimisation</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">Données collectées</div></div>
+  </div>
+
+  <hr class="divider">
+
+  <section class="features">
+    <div class="sec-head">
+      <h2 class="sec-title">Ce que fait le script</h2>
+      <p class="sec-sub">8 modules indépendants — utilisez-les tous ou choisissez les vôtres</p>
+    </div>
+    <div class="grid">
+      <div class="fc"><div class="fi">🗑️</div><div class="ft">Debloat</div><div class="fd">Candy Crush, TikTok, Facebook, Xbox Apps, Skype, BingNews, Wallet et +30 autres apps pré-installées.</div><span class="fcount">~40 apps</span></div>
+      <div class="fc"><div class="fi">⚙️</div><div class="ft">Services</div><div class="fd">Télémétrie, Xbox Live, Maps, Fax, Remote Registry, WAP Push — désactivés en toute sécurité.</div><span class="fcount">~20 services</span></div>
+      <div class="fc"><div class="fi">🔒</div><div class="ft">Confidentialité</div><div class="fd">Télémétrie à zéro, Cortana off, Bing désactivé dans la recherche, ID publicitaire supprimé, Timeline off.</div><span class="fcount">15 réglages</span></div>
+      <div class="fc"><div class="fi">🚀</div><div class="ft">Performances</div><div class="fd">Plan Haute Performance, effets visuels réduits, mémoire optimisée, NTFS LastAccess désactivé.</div><span class="fcount">+30% boot</span></div>
+      <div class="fc"><div class="fi">🌐</div><div class="ft">Réseau</div><div class="fd">DNS Cloudflare (1.1.1.1), limite QoS supprimée, algorithme de Nagle désactivé, TCP optimisé.</div><span class="fcount">+20% bande passante</span></div>
+      <div class="fc"><div class="fi">🧹</div><div class="ft">Nettoyage</div><div class="fd">Fichiers temp, cache IE, Prefetch, Corbeille, Windows.old — vérification intégrité SFC incluse.</div><span class="fcount">Go libérés</span></div>
+      <div class="fc"><div class="fi">⚡</div><div class="ft">Démarrage</div><div class="fd">13 tâches planifiées de télémétrie supprimées. Fast Boot activé. Démarrage nettement accéléré.</div><span class="fcount">13 tâches</span></div>
+      <div class="fc"><div class="fi">🛡️</div><div class="ft">Sécurité</div><div class="fd">Pare-feu ON, SMBv1 OFF (anti-WannaCry), AutoRun OFF, RDP OFF, UAC ON, Defender renforcé.</div><span class="fcount">6 durcissements</span></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- GUIDE DÉPLOIEMENT -->
+  <section class="deploy">
+    <div class="sec-head">
+      <h2 class="sec-title">Déployer sur GitHub + Vercel</h2>
+      <p class="sec-sub">Mise en ligne en moins de 5 minutes</p>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-header">
+        <div class="dh-icon">📁</div>
+        Structure du repo &amp; configuration Vercel
+      </div>
+      <div class="deploy-body">
+
+        <div class="dstep">
+          <div class="dstep-num">1</div>
+          <div>
+            <div class="dstep-title">Créer le repo GitHub avec ces 4 fichiers</div>
+            <div class="dstep-code">
+              <span class="cg">winoptimizer/</span><br>
+              &nbsp;├── <span class="ca">index.html</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># Landing page</span><br>
+              &nbsp;├── <span class="ca">install.ps1</span> &nbsp;&nbsp;&nbsp;<span class="cm"># Launcher (irm | iex)</span><br>
+              &nbsp;├── <span class="ca">WinOptimizer.ps1</span> <span class="cm"># Script principal</span><br>
+              &nbsp;└── <span class="ca">vercel.json</span> &nbsp;&nbsp;&nbsp;<span class="cm"># Headers MIME ← important</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dstep">
+          <div class="dstep-num">2</div>
+          <div>
+            <div class="dstep-title">Contenu du fichier <code>vercel.json</code> (obligatoire)</div>
+            <div class="dstep-desc">Sans ce fichier, Vercel ne sert pas correctement les .ps1 et <code>irm</code> échoue.</div>
+            <div class="dstep-code">
+              {<br>
+              &nbsp;&nbsp;<span class="ca">"headers"</span>: [{<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ca">"source"</span>: <span class="co">"/(.*).ps1"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="ca">"headers"</span>: [{<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ca">"key"</span>: <span class="co">"Content-Type"</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ca">"value"</span>: <span class="co">"text/plain; charset=utf-8"</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;}]<br>
+              &nbsp;&nbsp;}]<br>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="dstep">
+          <div class="dstep-num">3</div>
+          <div>
+            <div class="dstep-title">Importer sur Vercel</div>
+            <div class="dstep-desc"><strong>vercel.com</strong> → Add New Project → importer le repo GitHub. Dans les settings du projet, renommez le domaine en <code>winoptimizer-powershell</code>.</div>
+            <div class="dstep-code">
+              Framework Preset &nbsp;: <span class="co">Other</span><br>
+              Build Command &nbsp;&nbsp;&nbsp;: <span class="cm">(vide)</span><br>
+              Output Directory : <span class="cm">(vide)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dstep">
+          <div class="dstep-num">4</div>
+          <div>
+            <div class="dstep-title">✔ URLs finales après déploiement</div>
+            <div class="dstep-code">
+              🌐 <span class="ca">https://winoptimizer-powershell.vercel.app</span><br>
+              📜 <span class="cg">https://winoptimizer-powershell.vercel.app/install.ps1</span><br>
+              📜 <span class="cg">https://winoptimizer-powershell.vercel.app/WinOptimizer.ps1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dstep">
+          <div class="dstep-num">5</div>
+          <div>
+            <div class="dstep-title">Commande à partager à vos utilisateurs</div>
+            <div class="dstep-code">
+              <span class="cg">irm</span> <span class="ca">https://winoptimizer-powershell.vercel.app/install.ps1</span> <span class="cg">| iex</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  WinOptimizer v2.0 — Open Source &nbsp;·&nbsp;
+  Point de restauration créé automatiquement &nbsp;·&nbsp;
+  Compatible Windows 10 (1809+) &amp; Windows 11<br>
+  <a href="https://winoptimizer-powershell.vercel.app/install.ps1">install.ps1</a>
+  &nbsp;·&nbsp;
+  <a href="https://winoptimizer-powershell.vercel.app/WinOptimizer.ps1">WinOptimizer.ps1</a>
+</footer>
+
+<script>
+const CMD = 'irm https://winoptimizer-powershell.vercel.app/install.ps1 | iex';
+function doCopy() {
+  navigator.clipboard.writeText(CMD).then(() => {
+    const b = document.getElementById('cpBtn');
+    b.textContent = '✔ Copié !'; b.classList.add('ok');
+    setTimeout(() => { b.textContent = 'Copier'; b.classList.remove('ok'); }, 2400);
+  });
+}
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }});
+}, { threshold: 0.08 });
+document.querySelectorAll('.fc,.stat,.dstep').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(22px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>

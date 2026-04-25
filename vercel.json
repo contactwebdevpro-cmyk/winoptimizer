@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(.*).ps1",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}
