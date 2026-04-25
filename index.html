@@ -4,13 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- TITLE : ≤55 chars, contient "powershell" (mot-clé de l'URL) -->
 <title>WinOptimizer — Script PowerShell debloat Windows</title>
-
-<!-- DESCRIPTION : ≤160 chars (était 184) -->
 <meta name="description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
-
-<!-- meta keywords SUPPRIMÉE : ignorée par Google, pénalisante selon l'audit -->
 
 <meta name="robots" content="index, follow">
 <meta name="author" content="WinOptimizer">
@@ -58,11 +53,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: "Inter", sans-serif;
@@ -72,7 +63,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     background:
         linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
@@ -93,22 +83,13 @@ body::before {
 .container {
     text-align: center;
     max-width: 880px;
+    padding: 60px 20px;
     z-index: 1;
 }
 
-/* LOGO — remplacé par <img> pour que l'audit détecte une image */
-.logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-}
+.logo { display: flex; justify-content: center; margin-bottom: 40px; }
+.logo img { width: 60px; height: 60px; }
 
-.logo img {
-    width: 60px;
-    height: 60px;
-}
-
-/* TITRE */
 h1 {
     font-size: 64px;
     font-weight: 600;
@@ -117,12 +98,9 @@ h1 {
     margin-bottom: 24px;
 }
 
-.highlight {
-    color: #3aa0ff;
-}
+.highlight { color: #3aa0ff; }
 
-/* TEXTE */
-p {
+.subtitle {
     font-size: 20px;
     color: #9aa4b2;
     line-height: 1.6;
@@ -131,15 +109,14 @@ p {
 
 /* TERMINAL */
 .terminal {
-    width: 760px;
+    width: 100%;
+    max-width: 760px;
     margin: auto;
     background: rgba(5,10,20,0.85);
     border: 1px solid rgba(100,140,255,0.2);
     border-radius: 14px;
     padding: 20px 24px 26px;
-    box-shadow: 
-        0 0 40px rgba(0,120,255,0.15),
-        inset 0 0 20px rgba(0,120,255,0.05);
+    box-shadow: 0 0 40px rgba(0,120,255,0.15), inset 0 0 20px rgba(0,120,255,0.05);
 }
 
 .terminal-header {
@@ -175,6 +152,79 @@ code {
 .ps  { color: #4dfc7c; }
 .url { color: #3aa0ff; }
 
+/* FEATURES */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 64px;
+    text-align: left;
+}
+
+.feature-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.feature-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+}
+
+.feature-card p {
+    font-size: 14px;
+    color: #6b7a8d;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* FAQ */
+.faq {
+    margin-top: 64px;
+    text-align: left;
+    width: 100%;
+}
+
+.faq h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.faq-item {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 0;
+}
+
+.faq-item:last-child {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.faq-item h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #c8d3e0;
+    margin-bottom: 8px;
+}
+
+.faq-item p {
+    font-size: 14px;
+    color: #6b7a8d;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
 /* SOCIAL FOOTER */
 .social-footer {
     margin-top: 48px;
@@ -199,32 +249,29 @@ code {
 </head>
 
 <body>
-
 <div class="container">
 
-    <!-- IMAGE : balise <img> avec alt pour que l'audit détecte une image -->
     <div class="logo">
         <img
             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='0' y='0' width='26' height='26' fill='%233aa0ff'/%3E%3Crect x='34' y='0' width='26' height='26' fill='%230066ff'/%3E%3Crect x='0' y='34' width='26' height='26' fill='%230066ff'/%3E%3Crect x='34' y='34' width='26' height='26' fill='%233aa0ff'/%3E%3C/svg%3E"
-            alt="WinOptimizer logo — script PowerShell debloat Windows"
+            alt="WinOptimizer logo — outil de debloat pour PC"
             width="60"
             height="60"
         >
     </div>
 
     <h1>
-        Votre PC Windows,<br>
+        Votre PC,<br>
         enfin <span class="highlight">libéré.</span>
     </h1>
 
-    <p>
-        Une seule commande PowerShell. Supprime les bloatwares,<br>
-        coupe la télémétrie, accélère le démarrage et renforce la sécurité —<br>
-        sans rien installer.
+    <p class="subtitle">
+        Une seule commande suffit. Supprimez les applications préinstallées inutiles,
+        désactivez la collecte de données, accélérez le démarrage et renforcez
+        la sécurité de votre système — sans rien télécharger ni installer.
     </p>
 
     <div class="terminal">
-
         <div class="terminal-header">
             <div class="dots">
                 <div class="dot red"></div>
@@ -233,15 +280,79 @@ code {
             </div>
             <button class="copy-btn" onclick="copyCommand(this)">Copier</button>
         </div>
-
         <code id="command">
             <span class="ps">PS&gt;</span>
             irm <span class="url">https://winoptimizer-powershell.vercel.app/install.ps1</span> | iex
         </code>
-
     </div>
 
-    <!-- SOCIAL LINKS : requis par l'audit -->
+    <!-- FEATURES -->
+    <section class="features" aria-label="Fonctionnalités">
+
+        <div class="feature-card">
+            <div class="feature-icon">🧹</div>
+            <h3>Suppression des bloatwares</h3>
+            <p>Retire automatiquement les applications préinstallées inutiles : jeux, assistants, barres d'outils et autres logiciels qui ralentissent votre machine dès le premier démarrage.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Désactivation de la télémétrie</h3>
+            <p>Coupe les services de collecte de données en arrière-plan. Votre activité reste sur votre machine. Moins de trafic réseau inutile, plus de confidentialité au quotidien.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Démarrage accéléré</h3>
+            <p>Désactive les tâches planifiées et services non essentiels qui s'exécutent à chaque démarrage. Le résultat est immédiat : votre bureau s'affiche plus vite, sans effort.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Sécurité renforcée</h3>
+            <p>Active les paramètres de sécurité recommandés souvent désactivés par défaut. Réduit la surface d'attaque en désactivant les protocoles et ports inutilisés.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Entièrement open source</h3>
+            <p>Le script est lisible, auditable et modifiable. Pas de binaire opaque, pas d'exécutable mystérieux. Vous savez exactement ce qui s'exécute sur votre ordinateur.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Toujours à jour</h3>
+            <p>Le script évolue avec les mises à jour du système. Compatible avec les versions récentes, il s'adapte aux changements pour rester efficace sur votre configuration.</p>
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" aria-label="Questions fréquentes">
+        <h2>Questions fréquentes</h2>
+
+        <div class="faq-item">
+            <h3>Est-ce que ce script est sûr à utiliser ?</h3>
+            <p>Oui. Le code est entièrement open source et disponible sur GitHub. Il n'installe aucun programme, ne modifie pas le registre de manière irréversible et n'effectue aucune action réseau autre que son propre téléchargement. Vous pouvez lire chaque ligne avant de l'exécuter.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Sur quelles versions fonctionne-t-il ?</h3>
+            <p>Le script est compatible avec les éditions courantes 64 bits. Il détecte automatiquement votre version et adapte les opérations en conséquence. Un compte administrateur est requis pour appliquer l'ensemble des optimisations.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Puis-je annuler les modifications ?</h3>
+            <p>Un point de restauration système est créé automatiquement avant toute modification. En cas de problème, vous pouvez revenir à l'état précédent depuis les options de récupération de votre système en quelques clics.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Faut-il relancer le script après une mise à jour ?</h3>
+            <p>Certaines mises à jour majeures peuvent réactiver des paramètres modifiés. Il est recommandé de relancer le script après une mise à jour importante pour s'assurer que toutes les optimisations restent appliquées.</p>
+        </div>
+
+    </section>
+
     <nav class="social-footer" aria-label="Réseaux sociaux">
         <a href="https://github.com/winoptimizer" rel="noopener" target="_blank" aria-label="GitHub WinOptimizer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
