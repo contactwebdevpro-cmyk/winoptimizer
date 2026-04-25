@@ -44,18 +44,26 @@ function Write-Log {
     $line = "[$timestamp] [$Level] $Message"
     Add-Content -Path $LogFile -Value $line -ErrorAction SilentlyContinue
 
-    switch ($Level) {
-        "OK"      { Write-Host "  [OK]  " -ForegroundColor Green  -NoNewline; Write-Host $Message }
-        "WARN"    { Write-Host "  [!]   " -ForegroundColor Yellow -NoNewline; Write-Host $Message }
-        "ERROR"   { Write-Host "  [ERR] " -ForegroundColor Red    -NoNewline; Write-Host $Message }
-        "SKIP"    { Write-Host "  [-]   " -ForegroundColor Gray   -NoNewline; Write-Host $Message }
-        "SECTION" {
-            Write-Host ""
-            Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
-            Write-Host "  >> $Message" -ForegroundColor Cyan
-            Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
-        }
-        default   { Write-Host "  [i]   " -ForegroundColor Blue   -NoNewline; Write-Host $Message }
+    if ($Level -eq "OK") {
+        Write-Host "  [OK]     " -ForegroundColor Green  -NoNewline
+        Write-Host $Message
+    } elseif ($Level -eq "WARN") {
+        Write-Host "  [!]      " -ForegroundColor Yellow -NoNewline
+        Write-Host $Message
+    } elseif ($Level -eq "ERROR") {
+        Write-Host "  [ERREUR] " -ForegroundColor Red    -NoNewline
+        Write-Host $Message
+    } elseif ($Level -eq "SKIP") {
+        Write-Host "  [-]      " -ForegroundColor Gray   -NoNewline
+        Write-Host $Message
+    } elseif ($Level -eq "SECTION") {
+        Write-Host ""
+        Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
+        Write-Host "  >> $Message"                                  -ForegroundColor Cyan
+        Write-Host "  ------------------------------------------" -ForegroundColor DarkCyan
+    } else {
+        Write-Host "  [i]      " -ForegroundColor Blue   -NoNewline
+        Write-Host $Message
     }
 }
 
