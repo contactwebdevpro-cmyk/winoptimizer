@@ -4,104 +4,136 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WinOptimizer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", sans-serif;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    body {
-        background: radial-gradient(circle at center, #0a1a2f, #02060d);
-        color: white;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+body {
+    font-family: "Inter", sans-serif;
+    color: white;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .container {
-        text-align: center;
-        max-width: 900px;
-        padding: 20px;
-    }
+    /* Background sombre + grille */
+    background:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        radial-gradient(circle at center, #0b1c34 0%, #02060d 70%);
+    background-size: 40px 40px, 40px 40px, cover;
+}
 
-    .logo {
-        width: 60px;
-        margin: 0 auto 30px;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 5px;
-    }
+/* Glow central */
+body::before {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,120,255,0.25), transparent 70%);
+    filter: blur(80px);
+    z-index: 0;
+}
 
-    .logo div {
-        width: 25px;
-        height: 25px;
-        background: linear-gradient(135deg, #3aa0ff, #0066ff);
-        border-radius: 2px;
-    }
+.container {
+    text-align: center;
+    max-width: 880px;
+    z-index: 1;
+}
 
-    h1 {
-        font-size: 48px;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
+/* Logo Windows */
+.logo {
+    display: grid;
+    grid-template-columns: repeat(2, 26px);
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
 
-    .highlight {
-        color: #3aa0ff;
-    }
+.logo div {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(145deg, #3aa0ff, #0066ff);
+    box-shadow: 0 0 15px rgba(0,120,255,0.6);
+}
 
-    p {
-        color: #a0a8b8;
-        font-size: 18px;
-        line-height: 1.6;
-        margin-bottom: 40px;
-    }
+/* TITRE */
+h1 {
+    font-size: 64px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+}
 
-    .terminal {
-        background: #050b16;
-        border: 1px solid #1e2a44;
-        border-radius: 12px;
-        padding: 20px;
-        display: inline-block;
-        text-align: left;
-        box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
-    }
+.highlight {
+    color: #3aa0ff;
+}
 
-    .dots {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
+/* TEXTE */
+p {
+    font-size: 20px;
+    color: #9aa4b2;
+    line-height: 1.6;
+    margin-bottom: 60px;
+}
 
-    .dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-    }
+/* TERMINAL */
+.terminal {
+    width: 760px;
+    margin: auto;
+    background: rgba(5,10,20,0.8);
+    border: 1px solid rgba(100,140,255,0.2);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 
+        0 0 40px rgba(0,120,255,0.15),
+        inset 0 0 20px rgba(0,120,255,0.05);
+}
 
-    .red { background: #ff5f56; }
-    .yellow { background: #ffbd2e; }
-    .green { background: #27c93f; }
+/* DOTS */
+.dots {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
 
-    code {
-        font-size: 16px;
-        color: #8be9fd;
-    }
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
 
-    .ps {
-        color: #50fa7b;
-    }
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
 
-    .url {
-        color: #3aa0ff;
-    }
+/* CODE */
+code {
+    font-size: 18px;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.ps {
+    color: #4dfc7c;
+}
+
+.url {
+    color: #3aa0ff;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
+
     <div class="logo">
         <div></div>
         <div></div>
@@ -126,11 +158,13 @@
             <div class="dot yellow"></div>
             <div class="dot green"></div>
         </div>
+
         <code>
-            <span class="ps">PS&gt;</span> irm 
-            <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span> | iex
+            <span class="ps">PS&gt;</span>
+            irm <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span> | iex
         </code>
     </div>
+
 </div>
 
 </body>
