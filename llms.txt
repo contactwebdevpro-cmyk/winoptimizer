@@ -1,0 +1,25 @@
+# WinOptimizer
+
+> Outil gratuit de nettoyage et d'optimisation système pour PC. Une seule commande suffit.
+
+WinOptimizer est un script open source qui supprime les logiciels indésirables préinstallés, désactive la collecte de données en arrière-plan, accélère le démarrage et renforce la sécurité — sans installation requise.
+
+## Utilisation
+
+```powershell
+irm https://winoptimizer-powershell.vercel.app/install.ps1 | iex
+```
+
+## Fonctionnalités
+
+- Suppression des bloatwares et applications préinstallées inutiles
+- Désactivation de la télémétrie et de la collecte de données
+- Optimisation du démarrage système
+- Renforcement de la sécurité réseau
+- Open source, auditable, sans installation
+
+## Liens
+
+- Site : https://winoptimizer-powershell.vercel.app/
+- GitHub : https://github.com/winoptimizer
+- Contact : https://winoptimizer-powershell.vercel.app/contact
