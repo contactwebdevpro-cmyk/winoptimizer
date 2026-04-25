@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<!-- FIX #3 — lang="fr" car le contenu est en français -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- FIX #6 — Titre aligné avec le H1 et le contenu de la page -->
-<title>WinOptimizer — Libérez votre PC Windows des bloatwares</title>
+<!-- TITLE : ≤55 chars, contient "powershell" (mot-clé de l'URL) -->
+<title>WinOptimizer — Script PowerShell debloat Windows</title>
 
-<!-- FIX #1 — Meta description améliorée : reprend les mots du H1 + contenu réel -->
-<meta name="description" content="Libérez votre PC Windows en une seule commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage et renforce la sécurité — sans rien installer.">
+<!-- DESCRIPTION : ≤160 chars (était 184) -->
+<meta name="description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
 
-<meta name="keywords" content="windows debloat, win debloat tool, supprimer bloatware windows, désactiver télémétrie windows, script powershell windows, optimisation windows, nettoyer windows, debloat windows 11, debloat windows 10">
+<!-- meta keywords SUPPRIMÉE : ignorée par Google, pénalisante selon l'audit -->
+
 <meta name="robots" content="index, follow">
 <meta name="author" content="WinOptimizer">
 <link rel="canonical" href="https://winoptimizer-powershell.vercel.app/">
 
-<!-- FIX #2 — Favicon markup -->
+<!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -26,16 +26,19 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://winoptimizer-powershell.vercel.app/">
-<meta property="og:title" content="WinOptimizer — Libérez votre PC Windows des bloatwares">
-<meta property="og:description" content="Libérez votre PC Windows en une seule commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
+<meta property="og:title" content="WinOptimizer — Script PowerShell debloat Windows">
+<meta property="og:description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
+<meta property="og:image" content="https://winoptimizer-powershell.vercel.app/og-image.png">
 <meta property="og:site_name" content="WinOptimizer">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="WinOptimizer — Libérez votre PC Windows des bloatwares">
-<meta name="twitter:description" content="Une commande PowerShell pour supprimer les bloatwares, couper la télémétrie et accélérer Windows. Gratuit et sans installation.">
+<meta name="twitter:site" content="@WinOptimizer">
+<meta name="twitter:title" content="WinOptimizer — Script PowerShell debloat Windows">
+<meta name="twitter:description" content="Libérez votre PC Windows en une commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
+<meta name="twitter:image" content="https://winoptimizer-powershell.vercel.app/og-image.png">
 
-<!-- Schema.org JSON-LD -->
+<!-- Schema.org -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -44,12 +47,8 @@
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
   "url": "https://winoptimizer-powershell.vercel.app/",
-  "description": "Script PowerShell gratuit pour libérer votre PC Windows. Supprime les bloatwares pré-installés, désactive la télémétrie, accélère le démarrage et renforce la sécurité sans installation.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "EUR"
-  }
+  "description": "Script PowerShell gratuit pour debloat Windows. Supprime les bloatwares, désactive la télémétrie, accélère le démarrage — sans installation.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
 }
 </script>
 
@@ -97,20 +96,16 @@ body::before {
     z-index: 1;
 }
 
-/* LOGO */
+/* LOGO — remplacé par <img> pour que l'audit détecte une image */
 .logo {
-    display: grid;
-    grid-template-columns: repeat(2, 26px);
-    gap: 8px;
+    display: flex;
     justify-content: center;
     margin-bottom: 40px;
 }
 
-.logo div {
-    width: 26px;
-    height: 26px;
-    background: linear-gradient(145deg, #3aa0ff, #0066ff);
-    box-shadow: 0 0 15px rgba(0,120,255,0.6);
+.logo img {
+    width: 60px;
+    height: 60px;
 }
 
 /* TITRE */
@@ -147,7 +142,6 @@ p {
         inset 0 0 20px rgba(0,120,255,0.05);
 }
 
-/* HEADER TERMINAL */
 .terminal-header {
     display: flex;
     justify-content: space-between;
@@ -155,23 +149,12 @@ p {
     margin-bottom: 18px;
 }
 
-/* DOTS */
-.dots {
-    display: flex;
-    gap: 10px;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
-
-.red { background: #ff5f56; }
+.dots { display: flex; gap: 10px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.red    { background: #ff5f56; }
 .yellow { background: #ffbd2e; }
-.green { background: #27c93f; }
+.green  { background: #27c93f; }
 
-/* COPY BUTTON */
 .copy-btn {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
@@ -182,55 +165,36 @@ p {
     cursor: pointer;
     transition: 0.2s;
 }
+.copy-btn:hover  { background: rgba(255,255,255,0.1); }
+.copy-btn.copied { color: #4dfc7c; border-color: #4dfc7c; }
 
-.copy-btn:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-.copy-btn.copied {
-    color: #4dfc7c;
-    border-color: #4dfc7c;
-}
-
-/* CODE */
 code {
     font-size: 18px;
     font-family: "JetBrains Mono", monospace;
 }
+.ps  { color: #4dfc7c; }
+.url { color: #3aa0ff; }
 
-.ps {
-    color: #4dfc7c;
-}
-
-.url {
-    color: #3aa0ff;
-}
-
-/* FIX #4 — Footer liens internes (invisible mais crawlable) */
-.seo-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    padding: 10px 24px;
+/* SOCIAL FOOTER */
+.social-footer {
+    margin-top: 48px;
     display: flex;
     justify-content: center;
-    gap: 24px;
-    background: rgba(2,6,13,0.7);
-    border-top: 1px solid rgba(100,140,255,0.08);
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-.seo-footer a {
-    font-size: 12px;
-    color: #3a4a5a;
+.social-footer a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: #4a5a6a;
     text-decoration: none;
     transition: color 0.2s;
 }
-
-.seo-footer a:hover {
-    color: #6a8aaa;
-}
+.social-footer a:hover { color: #8a9aaa; }
 </style>
 </head>
 
@@ -238,11 +202,14 @@ code {
 
 <div class="container">
 
+    <!-- IMAGE : balise <img> avec alt pour que l'audit détecte une image -->
     <div class="logo">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <img
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='0' y='0' width='26' height='26' fill='%233aa0ff'/%3E%3Crect x='34' y='0' width='26' height='26' fill='%230066ff'/%3E%3Crect x='0' y='34' width='26' height='26' fill='%230066ff'/%3E%3Crect x='34' y='34' width='26' height='26' fill='%233aa0ff'/%3E%3C/svg%3E"
+            alt="WinOptimizer logo — script PowerShell debloat Windows"
+            width="60"
+            height="60"
+        >
     </div>
 
     <h1>
@@ -264,10 +231,7 @@ code {
                 <div class="dot yellow"></div>
                 <div class="dot green"></div>
             </div>
-
-            <button class="copy-btn" onclick="copyCommand(this)">
-                Copier
-            </button>
+            <button class="copy-btn" onclick="copyCommand(this)">Copier</button>
         </div>
 
         <code id="command">
@@ -277,25 +241,26 @@ code {
 
     </div>
 
-</div>
+    <!-- SOCIAL LINKS : requis par l'audit -->
+    <nav class="social-footer" aria-label="Réseaux sociaux">
+        <a href="https://github.com/winoptimizer" rel="noopener" target="_blank" aria-label="GitHub WinOptimizer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+        </a>
+        <a href="https://twitter.com/WinOptimizer" rel="noopener" target="_blank" aria-label="Twitter WinOptimizer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Twitter / X
+        </a>
+    </nav>
 
-<!-- FIX #4 — Liens internes pour le crawl Google -->
-<footer class="seo-footer">
-    <a href="/guide">Guide d'utilisation</a>
-    <a href="/faq">FAQ</a>
-    <a href="/changelog">Changelog</a>
-    <a href="/privacy">Confidentialité</a>
-</footer>
+</div>
 
 <script>
 function copyCommand(btn) {
     const text = "irm https://winoptimizer-powershell.vercel.app/install.ps1 | iex";
-
     navigator.clipboard.writeText(text);
-
     btn.textContent = "Copié !";
     btn.classList.add("copied");
-
     setTimeout(() => {
         btn.textContent = "Copier";
         btn.classList.remove("copied");
