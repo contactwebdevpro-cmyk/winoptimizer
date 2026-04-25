@@ -1,55 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- FIX #3 — lang="fr" car le contenu est en français -->
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ── SEO CORE ── -->
-<title>Windows Debloat Tool — Free PowerShell Script | WinOptimizer</title>
-<meta name="description" content="The best free Windows debloat tool. One PowerShell command removes bloatware, disables telemetry, boosts startup speed and hardens privacy — no install needed. Works on Windows 10 & 11.">
-<meta name="keywords" content="windows debloat, win debloat tool, windows debloat script, remove bloatware windows, disable windows telemetry, powershell debloat, windows optimization, free windows debloat, debloat windows 11, debloat windows 10">
+<!-- FIX #6 — Titre aligné avec le H1 et le contenu de la page -->
+<title>WinOptimizer — Libérez votre PC Windows des bloatwares</title>
+
+<!-- FIX #1 — Meta description améliorée : reprend les mots du H1 + contenu réel -->
+<meta name="description" content="Libérez votre PC Windows en une seule commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage et renforce la sécurité — sans rien installer.">
+
+<meta name="keywords" content="windows debloat, win debloat tool, supprimer bloatware windows, désactiver télémétrie windows, script powershell windows, optimisation windows, nettoyer windows, debloat windows 11, debloat windows 10">
 <meta name="robots" content="index, follow">
 <meta name="author" content="WinOptimizer">
 <link rel="canonical" href="https://winoptimizer-powershell.vercel.app/">
 
-<!-- ── OPEN GRAPH (Reddit / Discord / Facebook) ── -->
+<!-- FIX #2 — Favicon markup -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0b1c34">
+
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://winoptimizer-powershell.vercel.app/">
-<meta property="og:title" content="Windows Debloat Tool — Free PowerShell Script | WinOptimizer">
-<meta property="og:description" content="One command removes bloatware, disables telemetry & boosts speed. The best free win debloat tool. No install needed. Works on Windows 10 & 11.">
+<meta property="og:title" content="WinOptimizer — Libérez votre PC Windows des bloatwares">
+<meta property="og:description" content="Libérez votre PC Windows en une seule commande PowerShell. Supprime les bloatwares, coupe la télémétrie, accélère le démarrage — sans rien installer.">
 <meta property="og:site_name" content="WinOptimizer">
 
-<!-- ── TWITTER CARD ── -->
+<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Windows Debloat Tool — Free PowerShell Script | WinOptimizer">
-<meta name="twitter:description" content="One command removes bloatware, disables telemetry & boosts speed. The best free win debloat tool. No install needed.">
+<meta name="twitter:title" content="WinOptimizer — Libérez votre PC Windows des bloatwares">
+<meta name="twitter:description" content="Une commande PowerShell pour supprimer les bloatwares, couper la télémétrie et accélérer Windows. Gratuit et sans installation.">
 
-<!-- ── SCHEMA.ORG JSON-LD ── -->
+<!-- Schema.org JSON-LD -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "WinOptimizer — Windows Debloat Tool",
+  "name": "WinOptimizer",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Windows 10, Windows 11",
   "url": "https://winoptimizer-powershell.vercel.app/",
-  "description": "Free PowerShell-based Windows debloat script. Removes pre-installed bloatware, disables telemetry, speeds up startup and hardens system privacy — no installation required.",
+  "description": "Script PowerShell gratuit pour libérer votre PC Windows. Supprime les bloatwares pré-installés, désactive la télémétrie, accélère le démarrage et renforce la sécurité sans installation.",
   "offers": {
     "@type": "Offer",
     "price": "0",
-    "priceCurrency": "USD"
-  },
-  "featureList": [
-    "Remove Windows bloatware",
-    "Disable Windows telemetry",
-    "Boost startup speed",
-    "Harden system privacy",
-    "No installation required"
-  ]
+    "priceCurrency": "EUR"
+  }
 }
 </script>
 
-<!-- ── FONTS (preconnect évite le render-blocking) ── -->
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -64,8 +68,9 @@
 body {
     font-family: "Inter", sans-serif;
     color: white;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
@@ -200,6 +205,32 @@ code {
 .url {
     color: #3aa0ff;
 }
+
+/* FIX #4 — Footer liens internes (invisible mais crawlable) */
+.seo-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    background: rgba(2,6,13,0.7);
+    border-top: 1px solid rgba(100,140,255,0.08);
+}
+
+.seo-footer a {
+    font-size: 12px;
+    color: #3a4a5a;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.seo-footer a:hover {
+    color: #6a8aaa;
+}
 </style>
 </head>
 
@@ -247,6 +278,14 @@ code {
     </div>
 
 </div>
+
+<!-- FIX #4 — Liens internes pour le crawl Google -->
+<footer class="seo-footer">
+    <a href="/guide">Guide d'utilisation</a>
+    <a href="/faq">FAQ</a>
+    <a href="/changelog">Changelog</a>
+    <a href="/privacy">Confidentialité</a>
+</footer>
 
 <script>
 function copyCommand(btn) {
