@@ -22,7 +22,6 @@ body {
     align-items: center;
     justify-content: center;
 
-    /* Background sombre + grille */
     background:
         linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
@@ -30,7 +29,6 @@ body {
     background-size: 40px 40px, 40px 40px, cover;
 }
 
-/* Glow central */
 body::before {
     content: "";
     position: absolute;
@@ -47,7 +45,7 @@ body::before {
     z-index: 1;
 }
 
-/* Logo Windows */
+/* LOGO */
 .logo {
     display: grid;
     grid-template-columns: repeat(2, 26px);
@@ -88,20 +86,27 @@ p {
 .terminal {
     width: 760px;
     margin: auto;
-    background: rgba(5,10,20,0.8);
+    background: rgba(5,10,20,0.85);
     border: 1px solid rgba(100,140,255,0.2);
     border-radius: 14px;
-    padding: 22px 24px;
+    padding: 20px 24px 26px;
     box-shadow: 
         0 0 40px rgba(0,120,255,0.15),
         inset 0 0 20px rgba(0,120,255,0.05);
+}
+
+/* HEADER TERMINAL */
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
 }
 
 /* DOTS */
 .dots {
     display: flex;
     gap: 10px;
-    margin-bottom: 18px;
 }
 
 .dot {
@@ -113,6 +118,27 @@ p {
 .red { background: #ff5f56; }
 .yellow { background: #ffbd2e; }
 .green { background: #27c93f; }
+
+/* COPY BUTTON */
+.copy-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #cfd6e6;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.copy-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.copy-btn.copied {
+    color: #4dfc7c;
+    border-color: #4dfc7c;
+}
 
 /* CODE */
 code {
@@ -153,19 +179,43 @@ code {
     </p>
 
     <div class="terminal">
-        <div class="dots">
-            <div class="dot red"></div>
-            <div class="dot yellow"></div>
-            <div class="dot green"></div>
+
+        <div class="terminal-header">
+            <div class="dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+
+            <button class="copy-btn" onclick="copyCommand(this)">
+                Copier
+            </button>
         </div>
 
-        <code>
+        <code id="command">
             <span class="ps">PS&gt;</span>
             irm <span class="url">winoptimizer-powershell.vercel.app/install.ps1</span> | iex
         </code>
+
     </div>
 
 </div>
+
+<script>
+function copyCommand(btn) {
+    const text = "irm winoptimizer-powershell.vercel.app/install.ps1 | iex";
+
+    navigator.clipboard.writeText(text);
+
+    btn.textContent = "Copié !";
+    btn.classList.add("copied");
+
+    setTimeout(() => {
+        btn.textContent = "Copier";
+        btn.classList.remove("copied");
+    }, 2000);
+}
+</script>
 
 </body>
 </html>
